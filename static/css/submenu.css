@@ -1,0 +1,22 @@
+header > menu > li > ul {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  width: 230px;
+  padding: 20px;
+  background: #100500;
+}
+header > menu > li > ul li {
+  text-align: left;
+  margin: 5px 0;
+}
+header > menu > li > ul li span.ttl {
+  color: #fff;
+  font-size: 17px;
+}
+header > menu > li > ul li ul {
+  margin-left: 10px;
+}
+header > menu > li:hover ul {
+  display: block;
+}

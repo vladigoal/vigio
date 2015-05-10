@@ -1,0 +1,12 @@
+#django==1.5
+pillow
+south
+sorl-thumbnail
+django-bootstrap3
+django-filebrowser==3.5.1
+unidecode
+django-mptt
+django-paintstore
+django-debug-toolbar
+awesome-slugify
+django-grappelli==2.4.8

@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block extrastyle %}
+	<link href="{% static 'css/product.css' %}" type="text/css"  rel="stylesheet"/>
+{% endblock %}
+
+
+{% block container %}
+<div class="lookbook_wrapper col-xs-12">
+	<!-- Carousel -->
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+		<div class="carousel-inner">
+			{% for img in lookbook %}
+					{% if forloop.counter0 %}
+						<div class="item">
+					{% else %}
+						<div class="item active">
+					{% endif %}
+						{% for foo in img.slice %}
+							{% thumbnail foo.image "640x860" crop="center" as im %}
+									<a href="/shop/?lookbook={{ foo.id }}" class="in col-sm-4 num{{ forloop.counter }}">
+										<span style="background-image: url('{{ im.url }}');"></span>
+									</a>
+							{% endthumbnail %}
+						{% endfor %}
+					</div>
+			{% endfor %}
+		</div>
+	</div>
+	<!-- /.carousel -->
+	{% if lookbook.1 %}
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<img src="{% static 'img/index/arrow_l.png' %}">
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<img src="{% static 'img/index/arrow_r.png' %}">
+		</a>
+	{% endif %}
+</div>
+{% endblock container %}

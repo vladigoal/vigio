@@ -1,0 +1,14 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block extrastyle %}{% endblock %}
+
+
+{% block content %}
+	<div class="content_inner col-xs-10 col-xs-offset-1">
+		<h1>{{ flatpage.title }}</h1>
+		{{ flatpage.content }}
+		{{ django.contrib.flatpages.views.flatpage }}
+	</div>
+{% endblock content %}

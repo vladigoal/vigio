@@ -1,0 +1,116 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+	<link href="{% static 'css/cart.css' %}" type="text/css"  rel="stylesheet"/>
+	<script src="{% static 'libs/jquery.mask.js' %}"></script>
+	<script>
+		$(function(){
+		  $("#phoneInput").mask("(999) 999-99-99");
+
+		  $("#phoneInput").on("change", function() {
+		      var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+
+		      if( last.length == 3 ) {
+		          var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+		          var lastfour = move + last;
+
+		          var first = $(this).val().substr( 0, 9 );
+
+		          $(this).val( first + '-' + lastfour );
+		      }
+		  });
+		})
+	</script>
+{% endblock %}
+
+
+{% block content %}
+	<div class="content col-sm-8 col-sm-offset-2">
+		<div class="inner" ng-init="user={{user_data}}">
+			<h1>Корзина</h1>
+
+			<div ng-hide="cart.length">
+				<div>Пусто :(</div>
+				<br/>
+			</div>
+
+			<div class="cart_products" ng-show="cart.length">
+				<div class="ttl">
+					<div class="col-sm-4 col-sm-offset-1 name">Наименование</div>
+					<div class="col-sm-1">цвет</div>
+					<div class="col-sm-1">размер</div>
+					<div class="col-sm-2">цена</div>
+					<div class="col-sm-1">кол-во</div>
+					<div class="col-sm-1">всего</div>
+					<div class="col-sm-1"></div>
+				</div>
+
+				<table width="100%">
+					<tr ng-repeat="product in cart">
+						<td class="col-sm-1"></td>
+						<td class="col-sm-4 name">
+							{$product.name$}
+						</td>
+						<td class="col-sm-1">
+							{$product.color$}
+						</td>
+						<td class="col-sm-1">{$product.size$}</td>
+						<td class="col-sm-2">{$product.price$} грн</td>
+						<td class="col-sm-1">
+							<input type="text" ng-model="product.count" ng-change="product.count=onlyNumber(product.count)" style="width: 30px; text-align: center">
+						</td>
+						<td class="col-sm-1">{$ product.price*product.count$} грн</td>
+						<td class="col-sm-1 del">
+							<span class="glyphicon glyphicon-remove" ng-click="removeItem($index)" style="color:#a3276d;cursor: pointer;"></span>
+						</td>
+					</tr>
+				</table>
+
+				<div class="shipping_txt">Доставка:  по Киеву — 40,00 грн., по Украине — согласно тарифам «Новой Почты».</div>
+
+				<div class="total_wrap">
+					<div class="pull-left btn-continue">
+						<a class="back_link" href="/shop/">Вернутся к покупкам</a>
+					</div>
+
+					<div class="total pull-right">
+						<div class="sell-price pull-right"><span ng-bind="calcTotal()">00,00</span> грн</div>
+						Всего:
+					</div>
+				</div>
+
+				<div class="form_title">Контакты</div>
+				<form role="form" ng-model="order_form" name="order_form" id="order_form" ng-submit="onSubmit()">
+					<div class="bblock">
+						  <div class="form-group">
+						    <label>ФИО*</label>
+						    <input type="fio" name="fio" ng-model="user.name" class="form-control">
+						  </div>
+						  <div class="clearfix"></div>
+						  <div class="form-group pull-left" style="width: 248px;">
+						    <label for="phoneInput">Телефон (+38)*</label>
+						    <input type="text" name="phone" ng-model="user.phone" class="form-control" id="phoneInput" placeholder="">
+						  </div>
+						  <div class="form-group pull-right" style="width: 248px;">
+						    <label for="exampleInputPassword1">E-mail (<span style="font-size: 10px;">для получения подтверждения</span>)</label>
+						    <input type="text" name="email" ng-model="user.email" class="form-control" id="exampleInputPassword1" placeholder="">
+						  </div>
+						  <div class="clearfix"></div>
+				        <div class="form-group">
+						    <label>Адрес доставки/комментарий*</label>
+						    <textarea name="adress" id="" cols="10" class="form-control" rows="3">{{view.getLastAdress}}</textarea>
+						  </div>
+							{% csrf_token %}
+
+					</div>
+					<div style="text-align: center;">
+						<button type="submit" href="" class="btn">отправить заказ</button>
+					</div>
+					<div class="msg"></div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+{% endblock content %}

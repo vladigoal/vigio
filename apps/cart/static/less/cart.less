@@ -1,0 +1,85 @@
+.cart_products{
+  margin-top: 55px;
+  color: #343433;
+  font-family:"Calibri";
+  font-size: 14px;
+
+  .ttl{
+    background: #fffaf4;
+	border-bottom: 2px solid #fff;
+
+    >div{
+      padding: 0;
+      line-height: 29px;
+      text-align: center;
+      text-transform: uppercase;
+
+      .name{
+        text-align: left;
+      }
+    }
+  }
+
+  tr{
+    background: #fffaf4;
+	border-bottom: 2px solid #fff;
+
+    td{
+      padding: 4px 0;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .name{
+      text-align: left;
+	  text-transform: uppercase;
+
+      img{
+        width: 44px;
+        height: 41px;
+        background-color: #fff;
+        border: 1px solid #3f3536;;
+      }
+    }
+  }
+}
+
+.shipping_txt{
+	margin-top: 20px;
+	margin-bottom: 10px;
+	color: #6f9b41;
+	font-family:"Calibri";
+	font-size: 15px;
+}
+.form_title{
+	margin-top: 50px;
+	margin-bottom: 15px;
+	color: #75580a;
+	font-family: Georgia;
+	font-size: 20px;
+	font-style: italic;
+}
+
+#order_form{
+  width: 600px;
+  position: relative;
+  padding-bottom: 40px;
+
+  button{
+    color: #000000;
+    font-weight: bold;
+    background-color: #ffe9b4;
+  }
+  .msg{
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ff0000;
+  }
+}
+
+.cart_products .ttl:after, .cart_products .item:after, .total_wrap:after{
+	content:'.';
+  clear:both;
+  height: 0;
+  display: block;
+  visibility: hidden;
+}

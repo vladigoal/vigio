@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+<form class="form-inline " ng-submit="loginSubmit()" ng-model="login_from" name="login_from" id="login_from" role="form" >
+	<div class="form-group">
+		<label class="sr-only" for="exampleInputEmail2">Email</label>
+		<input autocomplete="off" type="email" name="email2" ng-model="email2" required class="form-control" placeholder="E-mail">
+	</div>
+	<div class="form-group">
+		<label class="sr-only" for="exampleInputPassword2">Password</label>
+		<input autocomplete="off" type="password" name="pass" ng-model="pass" required class="form-control" placeholder="Пароль">
+	</div>
+	{% csrf_token %}
+	<button type="submit" class="btn btn-default">Вход</button>
+</form>

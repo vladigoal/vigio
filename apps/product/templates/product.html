@@ -1,0 +1,259 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}
+	<title>Vigio</title>
+	<meta name="description" content="Vigio - {{ product.name }}">
+	{% thumbnail products_images.0.image "640" crop="center" as img%}
+		<meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{ img.url }}" />
+  {% endthumbnail %}
+  <meta property="og:description" content="Vigio - {{ product.name }}" />
+{% endblock title %}
+
+{% block extrastyle %}
+	<script src="{% static 'libs/jquery.mask.js' %}"></script>
+	<link href="{% static 'css/product.css' %}" type="text/css"  rel="stylesheet"/>
+	<link href="{% static 'libs/cloud-zoom/cloud-zoom.css' %}" type="text/css"  rel="stylesheet"/>
+	<script src="{% static 'libs/cloud-zoom/cloud-zoom.js' %}"></script>
+	{% if products_images %}
+	<script>
+	$(function(){
+		$("#sewingModal input[name=phone]").mask("(999) 999-99-99");
+
+		  $("#sewingModal input[name=phone]").on("change", function() {
+		      var last = $(this).val().substr( $(this).val().indexOf("-") + 1 );
+
+		      if( last.length == 3 ) {
+		          var move = $(this).val().substr( $(this).val().indexOf("-") - 1, 1 );
+		          var lastfour = move + last;
+
+		          var first = $(this).val().substr( 0, 9 );
+
+		          $(this).val( first + '-' + lastfour );
+		      }
+		  });
+
+
+
+		$('.product ul.colors li:first, .product ul.sizes li:first').addClass('active');
+
+		prod_thumbs.init();
+
+		slider = {
+			x_pos: 0,
+			item_h: 178,
+			ul_obj: $('.thumbs .inner ul'),
+			ul_h: 0,
+			init: function(){
+				$('.thumbs .arr').removeClass('enabled');
+				slider.ul_h = $('.thumbs .inner li').length * slider.item_h
+				slider.ul_obj.height(slider.ul_h);
+				if($('.thumbs .inner li').length > 3){
+					$('.thumbs .arr').removeClass('hide');
+					$('.thumbs .arr.bot').addClass('enabled');
+				}else{
+					$('.thumbs .arr').addClass('hide');
+				}
+				slider.listeners();
+			},
+			listeners: function(){
+				$('.thumbs .arr').on('click', function(){
+					if($(this).hasClass('enabled')){
+						if($(this).hasClass('bot')){
+							slider.ul_obj.animate({
+								'margin-top': '-='+slider.item_h
+							}, 300, function(){
+								$('.thumbs .arr.top').addClass('enabled')
+								if(parseInt(slider.ul_obj.css("marginTop")) <= (slider.item_h * 3) - slider.ul_h)
+									$('.thumbs .arr.bot').removeClass('enabled')
+							})
+						}
+						if($(this).hasClass('top')){
+							slider.ul_obj.animate({
+								'margin-top': '+='+slider.item_h
+							}, 300, function(){
+								$('.thumbs .arr.bot').addClass('enabled')
+								if(parseInt(slider.ul_obj.css("marginTop")) >= 0)
+									$('.thumbs .arr.top').removeClass('enabled')
+							})
+						}
+					}
+					return false;
+				})
+			}
+
+		}
+
+		slider.init();
+	})
+	</script>
+	{% endif %}
+{% endblock %}
+
+
+{% block container %}
+	{% load flatpages %}
+	{% get_flatpages as flatpages %}
+    <div class="product_wrapper" add-to-cart="{{ product_json }}">
+        <div class="col-md-5">
+          <div class="col-md-9 col-md-offset-3">
+	          <div class="crumb">ViGiO {{ crumbs|safe }}</div>
+	        </div>
+        </div>
+
+        <div class="product col-md-12">
+            <div class="col-sm-5 images">
+
+              <div class="thumbs col-sm-3">
+	              {% if products_images %}
+                <a class="arr top" href="#"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></a>
+
+                <div class="inner">
+                  <ul>
+		                {% for img in products_images %}
+		                  {% thumbnail img.image "130" crop="center" as im %}
+		                    {% thumbnail img.image "610" crop="center" as im_big %}
+		                        <li data-image="{{ img.image.url }}" data-big="{{ im_big.url }}" data-id="{{ img.id }}" data-color_id="{{ img.color.id}}" class="col-xs-12"style="background-image: url({{ im.url }});"></li>
+			                  {% endthumbnail %}
+		                  {% endthumbnail %}
+		                {% endfor %}
+                  </ul>
+                </div>
+
+                <a class="arr bot" href="#">
+	                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                </a>
+	              {% endif %}
+              </div>
+
+	            <div class="col-sm-9">
+		              {% if products_images %}
+	                  <a id="zoom01" data-id="" class="cloud-zoom" href="" rel="transparentImage: '', useWrapper: false, showTitle: true, zoomWidth:'500', zoomHeight:'500', adjustY:0, adjustX:10">
+		                  <img width="100%" src="" />
+	                  </a>
+		              {% else %}
+		                <img width="100%" src="http://placehold.it/400x600/F6F6F6/&text=NO%20PHOTO" />
+		              {% endif %}
+			            <div class="prod_soc_share">
+				            {% thumbnail products_images.0.image "640" crop="center" as img%}
+											<a href="https://www.facebook.com/dialog/feed?app_id=712036538888692&display=popup&picture=http://{{ request.META.HTTP_HOST }}{{ img.url }}&link={{ request.build_absolute_uri }}&redirect_uri={{ request.build_absolute_uri }}">
+												<img src="{% static 'img/product/share_fb.png' %}">
+											</a>
+				            {% endthumbnail %}
+			              <a href="https://vk.com/share.php?url={{ request.build_absolute_uri }}">
+											<img src="{% static 'img/product/share_vk.png' %}">
+										</a>
+		              </div>
+              </div>
+
+            </div>
+
+            <div class="col-sm-6 info">
+                <div class="col-md-9 inner">
+                    <h1>{{ product.name }}</h1>
+                    <div class="desc">{{ product.desc|safe }}</div>
+                    {% if product.fabric %}
+                        <div class="sub_title">состав:</div>
+                        <div class="fabric">{{ product.fabric|safe }}</div>
+                    {% endif %}
+
+                    {% if product.care %}
+                        <ul class="care">
+                          {% for p in product.care.all %}
+                            {% thumbnail p.image "20x20" format="PNG" as im %}
+                               <li style="background-image: url({{ im.url }});"></li>
+                            {% endthumbnail %}
+                          {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <div class="sub_title">Выберите цвет</div>
+                    <ul class="colors">
+                      {% for p in product_colors %}
+                         <li data-color="{{ p.color }}" data-color_id="{{ p.color.id}}">
+	                        {% thumbnail p.image "36x48" format="PNG" as im %}
+	                           <span style="background-image: url({{ im.url }});"></span>
+                          {% endthumbnail %}
+                         </li>
+                      {% endfor %}
+                    </ul>
+
+                    {% if product.size %}
+                        <div class="sub_title">Выберите размер</div>
+                        <ul class="sizes">
+                            {% for s in product.size.all %}
+                                <li data-size="{{ s.name}}">{{ s.name }}</li>
+                            {% endfor %}
+                        </ul>
+	                      <div class="individual_sewing">
+                            <div>Индивидуальный пошив</div>
+                        </div>
+                        <div class="sizes_table">
+                            <div>Таблица размеров</div>
+                        </div>
+                    {% endif %}
+
+                    <div class="sub_title">Цена</div>
+                    <div class="price">{{ product.price }} <span>грн</span></div>
+
+                    <a class="buy_btn add-to-cart-btn" href="">Купить</a>
+                    <div class="alert alert-danger hide" role="alert"></div>
+                {% for foo in flatpages %}
+                  {% if foo.url == '/delivery/' %}
+		                <div class="add_info">
+		                  <a href="" class="ttl">{{ foo.title }}</a>
+		                  <div class="info">
+		                    <div class="inside">
+				                  {{ foo.content|safe }}
+		                    </div>
+		                  </div>
+		                </div>
+	                {% endif %}
+
+	                {% if foo.url == '/payment/' %}
+                    <div class="add_info">
+		                  <a href="" class="ttl">{{ foo.title }}</a>
+		                  <div class="info">
+		                    <div class="inside">
+				                  {{ foo.content|safe }}
+		                    </div>
+		                  </div>
+		                </div>
+                  {% endif %}
+                {% endfor %}
+
+                <div class="add_info">
+	                <a href="/contacts/" class="feedback">Задать вопрос</a>
+	              </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% if relative_products %}
+        <div class="col-sm-12 relative_accessories">Идеальное сочетание</div>
+
+        <div class="col-sm-12 accessories_wrap">
+        {% for r_product in relative_products %}
+            <div class="col-lg-2 col-sm-3 item">
+                <a href="/shop/product/{{ r_product.product.slug }}/">
+											{% if r_product.img_first %}
+												{% thumbnail r_product.img_first "200x200" crop="top" as im %}
+													<div class="img" style="background-image: url({{ im.url }});"></div>
+												{% endthumbnail %}
+											{% else %}
+												<div class="img" style="background-image: url(http://placehold.it/200x200/F6F6F6/&text=NO%20PHOTO);"></div>
+											{% endif %}
+                    <span class="name">{{ r_product.product.name}}</span>
+                    <span class="price">{{ r_product.product.price}} грн</span>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
+{% endblock container %}

@@ -1,0 +1,27 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block container %}
+	{% if slug %}
+		{% block content %}
+				<div class="content_inner col-xs-10 col-xs-offset-1">
+					<h1>{{ news.0.name }}</h1>
+					{{ news.0.description|safe }}
+				</div>
+			{% endblock content %}
+	{% else %}
+		<div class="news_wrap">
+			{% for ne in news %}
+				{% thumbnail ne.image "400x400" crop="center" as im %}
+	        <div class="col-xs-3" style="background-image: url({{ im.url }});">
+		        <a href="/news/{{ ne.slug }}/">
+			        <h3>{{ ne.name }}</h3>
+							<div class="date">{{ ne.date|date:"M d, Y" }}</div>
+		        </a>
+					</div>
+	      {% endthumbnail %}
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock container %}

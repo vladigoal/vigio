@@ -1,0 +1,20 @@
+<ul class="submenu shop_menu">
+	<li>
+		<span class="ttl">Коллекции</span>
+		<ul>
+	    {% for collection in menu_collections %}
+	      <li><a href="/shop/?collection={{ collection.id }}">{{ collection.name }}</a></li>
+	    {% endfor %}
+	  </ul>
+	</li>
+  <li>
+		{% for category in menu_categories %}
+			<span class="ttl">{{ category.cat.name }}</span>
+			<ul>
+				{% for sub_cat in category.sub_cat %}
+		      <li><a href="/shop/?category={{ sub_cat.id }}">{{ sub_cat.name }}</a></li>
+		    {% endfor %}
+			</ul>
+		{% endfor %}
+  </li>
+</ul>

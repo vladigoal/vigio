@@ -1,0 +1,112 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load catalog_color_position %}
+
+{% block extrastyle %}
+	<link href="{% static 'css/catalog.css' %}" type="text/css"  rel="stylesheet"/>
+{% endblock %}
+
+{% block header_submenu %}
+{#	{% include 'menu/filters.html' %}#}
+{% endblock header_submenu %}
+
+
+{% block container %}
+	<div class="col-sm-2 filters">
+
+		<div class="col-sm-12 menu">
+			<div class="title">Категории</div>
+			{% include 'menu/shop.html' %}
+		</div>
+		<div class="col-sm-12 price">
+			<div class="title">цена</div>
+		</div>
+
+		<div class="col-sm-12 price">
+			<div class="col-sm-3 from item txt">от</div>
+			<div class="col-sm-9 item">
+				<input name="start_price" val="">
+			</div>
+		</div>
+
+		<div class="col-sm-12 price">
+			<div class="col-sm-3 item txt">до</div>
+			<div class="col-sm-9 item">
+				<input name="fin_price" val="">
+			</div>
+		</div>
+
+
+		<div class="col-sm-12 sizes">
+			<div class="title">размеры</div>
+			{% for f in filter_size %}
+				<div class="col-xs-4 item">
+					<input type="checkbox" name="browser" value="{{ f.id }}"> {{ f.name }}
+				</div>
+			{% endfor %}
+
+		</div>
+
+		<div class="col-sm-12 filter_buttons">
+			<div class="col-sm-12 set"><a class="filter_btn" href="">фильтровать</a></div>
+			<div class="col-sm-12 reset"><a href="/shop/catalog/">очистить фильтр</a></div>
+		</div>
+
+	</div>
+
+	<div class="catalog_wrap col-sm-10">
+		{% for product in products %}
+			<div class="item">
+				<a href="/shop/product/{{ product.product.slug }}/">
+					{% if product.img_first %}
+						{% thumbnail product.img_first "320x400" crop="top" as im %}
+							<div class="img" style="background-image: url({{ im.url }});"></div>
+						{% endthumbnail %}
+					{% else %}
+						<div class="img" style="background-image: url(http://placehold.it/320x440/F6F6F6/&text=NO%20PHOTO);"></div>
+					{% endif %}
+					<div class="info">
+						<div class="name">{{ product.product.name }}</div>
+						<div class="col-md-12 price">{{ product.product.price }} грн</div>
+					</div>
+
+					<div class="hover">
+						{% if product.img_second %}
+							{% thumbnail product.img_second "320x400" crop="top" as im %}
+								<div class="img" style="background-image: url({{ im.url }});"></div>
+							{% endthumbnail %}
+						{% elif product.img_first %}
+							{% thumbnail product.img_first "320x400" crop="top" as im %}
+								<div class="img" style="background-image: url({{ im.url }});"></div>
+							{% endthumbnail %}
+						{% else %}
+							<div class="img" style="background-image: url(http://placehold.it/320x440/F6F6F6/&text=NO%20PHOTO);"></div>
+						{% endif %}
+
+						<div class="info">
+							<div class="name">{{ product.product.name }}</div>
+							<div class="col-md-12 price">{{ product.product.price }} грн</div>
+							<div class="add_info col-xs-12">
+								<strong>Размеры:</strong>
+								{% for s in product.product.size.all %}
+									{% if forloop.last %}
+										{{ s.name }}
+									{% else %}
+										{{ s.name }},&nbsp;
+									{% endif %}
+                {% endfor %}
+							</div>
+							<div class="add_info col-xs-12">
+								<strong>Артикул:</strong> {{ product.product.code|truncatechars:20 }}
+							</div>
+
+						</div>
+					</div>
+
+				</a>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock container %}

@@ -1,0 +1,5 @@
+<ul class="submenu lokbook_menu">
+	{% for foo in lookbook_menu %}
+		<li><a href="/lookbook?id={{ foo.id  }}">{{ foo.name }}</a></li>
+	{% endfor %}
+</ul>

@@ -1,0 +1,147 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+<!DOCTYPE html>
+<html lang="ru" ng-app="vigioApp">
+<head>
+  <meta charset="utf-8">
+	<meta name="keywords" content="{{ KEYWORDS }}">
+	<meta name="description" content="{{ DESCRIPTION }}">
+	{% block title %}
+		<title>VIGIO</title>
+	{% endblock title %}
+
+  <link type="image/x-icon" rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+  <link href="{% static 'css/reset.css' %}" type="text/css"  rel="stylesheet"/>
+	{% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'libs/bootstrapvalidator-0.5.0/css/bootstrapValidator.min.css' %}"/>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700,400italic&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	<link href="{% static 'css/header.css' %}" type="text/css"  rel="stylesheet"/>
+	<link href="{% static 'css/layout.css' %}" type="text/css"  rel="stylesheet"/>
+
+	<script src="{% static 'libs/jquery-2.1.1.min.js' %}"></script>
+	<script src="{% static 'libs/angular.min.js' %}"></script>
+  <script src="https://code.angularjs.org/1.2.25/angular-cookies.min.js"></script>
+
+	{% bootstrap_javascript %}
+	<script src="{% static 'libs/bootstrapvalidator-0.5.0/js/bootstrapValidator.min.js' %}"></script>
+	<script src="{% static 'js/site.js' %}"></script>
+	<script src="{% static 'js/shop.js' %}"></script>
+	<script src="{% static 'js/site_ang.js' %}"></script>
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+	{% block extrastyle %}{% endblock %}
+
+
+</head>
+<body ng-controller="baseController">
+
+	{% block header %}
+		{% include "header.html" %}
+	{% endblock header %}
+
+	<div class="container-fluid main_wrapper">
+		{% block container %}
+			{% block content %}{% endblock content %}
+		{% endblock container %}
+	</div>
+
+	{% include "footer.html" %}
+
+	<div class="blur_wrap hide">
+		<img src="{% static 'img/preloader.GIF' %}" />
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="sewingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Индивидуальный пошив</h4>
+	      </div>
+		    <form class="navbar-form" id="sewing-form" ng-submit="individualSewingSubmit()">
+		      <div class="modal-body">
+			        <div class="form-group">
+				        <input type="text" class="form-control" placeholder="ФИО*" name="fio" style="width: 365px;">
+						  </div>
+			        <div class="form-group">
+				        <input type="text" class="form-control" placeholder="Телефон*" name="phone">
+				        <input type="text" class="form-control" placeholder="Email" name="email">
+						  </div>
+
+						  <div class="form-group" style="width: 100%; margin-top: 15px;">
+							  <h4 class="modal-title" id="wear_name" style="font-size: 16px;">{{ product.name }}</h4>
+						  </div>
+
+			        <div class="form-group">
+				        <input type="text" class="form-control" placeholder="Размер*" name="size">
+						    <input type="text" class="form-control" placeholder="Цвет*" name="color">
+				        <input type="hidden" class="form-control" value="{{ product.name }}" name="product_name">
+						  </div>
+		      </div>
+			    {% csrf_token %}
+		      <div class="modal-footer">
+			      <div class="msg"></div>
+		        <button type="submit" class="btn btn-primary">Отправить</button>
+		      </div>
+			  </form>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="sizesModal" tabindex="-1" role="dialog" aria-labelledby="sizesModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
+	        <h4 class="modal-title" id="sizesModalLabel">Таблица размеров</h4>
+	      </div>
+	      <div class="modal-body">
+	        <table>
+		        <tr>
+			        <td>&nbsp;</td>
+			        <td>XS</td>
+			        <td>S</td>
+			        <td>M</td>
+		        </tr>
+		        <tr>
+			        <td>Рост 168-170</td>
+			        <td>42</td>
+			        <td>44</td>
+			        <td>46</td>
+		        </tr>
+		        <tr>
+			        <td>Обьем груди</td>
+			        <td>84</td>
+			        <td>88</td>
+			        <td>92</td>
+		        </tr>
+		        <tr>
+			        <td>Обьем талии</td>
+			        <td>64</td>
+			        <td>68</td>
+			        <td>72</td>
+		        </tr>
+		        <tr>
+			        <td>Обьем бедер</td>
+			        <td>94</td>
+			        <td>98</td>
+			        <td>102</td>
+		        </tr>
+	        </table>
+	      </div>
+	      <div class="modal-footer">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+</body>
+</html>

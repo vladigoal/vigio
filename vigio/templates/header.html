@@ -1,0 +1,72 @@
+{% load staticfiles %}
+
+<header class="container-fluid header_base" ng-init="cart={{cart_data}}">
+	<div class="col-sm-2 logo">
+		<a href="/"><img src="{% static 'img/index/logo.png' %}" /></a>
+	</div>
+
+	<div class="col-sm-7" style="padding: 0;">
+		<menu>
+			<li id="brand_menu">
+				<span>
+					БРЕНД VIGIO
+				</span>
+				{% include 'menu/brand.html' %}
+			</li>
+	    <li id="shop_menu">
+				<span>ONLINE МАГАЗИН</span>
+		    {% include 'menu/shop.html' %}
+			</li>
+	    <li>
+				<span>LOOKBOOK</span>
+		    {% include 'menu/lookbook.html' %}
+			</li>
+			<li>
+				<span>ИНФО</span>
+				{% include 'menu/info.html' %}
+			</li>
+			<li>
+				<a href="/news/">НОВОСТИ</a>
+			</li>
+			<li>
+				<a href="/contacts/">КОНТАКТЫ</a>
+			</li>
+	  </menu>
+	</div>
+
+	<div class="col-sm-2 col-lg-offset-1 service">
+		<div class="col-sm-6">
+			<span class="search_btn">
+				<img src="{% static 'img/search_icon.png' %}" alt=""/>
+				<form class="search_form" method="get" action="/shop">
+					<div class="inner">
+						<input name="searchword" value="{{ request.GET.searchword }}">
+						<button>поиск</button>
+					</div>
+				</form>
+			</span>
+		</div>
+		<div class="col-sm-6">
+			<a href="/cart/" class="basket_btn">
+				<img src="{% static 'img/basket_icon.png' %}" alt=""/>
+				<span class="prod_amount" ng-show="cart.length" ng-bind="productsAmount()"></span>
+
+				<div class="cart_list">
+					  <ul>
+					    <li ng-repeat="product in cart">
+						    <span class="col-sm-2 img"><img width="36" src="{$ product.image $}" /></span>
+						    <span class="col-sm-8 name">{$product.name$} <br/> {$product.price$} ₴</span>
+						    <span class="col-sm-2 amount">{$product.count$}</span>
+						   </li>
+						   <li class="price"><strong>Итого:</strong> <span ng-bind="calcTotal()">0,00</span> ₴</li>
+
+						  <li role="presentation" ng-hide="cart.length"><span class="name">Пусто :(</span></li>
+					  </ul>
+					</div>
+				</div>
+
+			</a>
+
+		</div>
+	</div>
+</header>

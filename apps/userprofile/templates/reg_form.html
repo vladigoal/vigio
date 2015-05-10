@@ -1,0 +1,32 @@
+{% load staticfiles %}
+
+<form role="form" ng-model="reg_form" name="reg_form" id="reg_form" class="col-sm-6" ng-submit="onRegSubmit()">
+	<div class="bblock">
+		  <div class="form-group"ng-class="(reg_form.fio.$valid?'':(form_submited?'has-error':''))">
+		    <label for="exampleInputEmail1">ФИО</label>
+		    <input type="fio" name="fio" ng-model="reg.name" class="form-control" required>
+		  </div>
+		  <div class="clearfix"></div>
+		  <div class="form-group pull-left" style="width: 248px;" ng-class="(reg_form.phone.$valid?'':(form_submited?'has-error':''))">
+		    <label for="exampleInputPassword1">Телефон</label>
+		    <input type="text" name="phone" ng-model="reg.phone" class="form-control" id="exampleInputPassword1" placeholder="" required>
+		  </div>
+		  <div class="form-group pull-right" style="width: 248px;" ng-class="(reg_form.email.$valid?'':(form_submited?'has-error':''))">
+		    <label for="exampleInputPassword1">E-mail</label>
+		    <input type="email" name="email" ng-model="reg.email" class="form-control" id="exampleInputPassword1" placeholder="" required>
+		  </div>
+        <div class="form-group pull-left" style="width: 248px;" ng-class="(reg_form.pass.$valid?'':(form_submited?'has-error':''))">
+		    <label for="exampleInputPassword1">Пароль</label>
+		    <input type="password" name="pass" ng-model="reg.pass" class="form-control" id="exampleInputPassword1" placeholder="" ng-required>
+		  </div>
+		  <div class="form-group pull-right" ng-class="(reg_form.pass2.$valid?'':(form_submited?'has-error':''))" style="width: 248px;">
+		    <label for="exampleInputPassword1">Подтвердите пароль</label>
+		    <input type="password" name="pass2" ng-model="reg.pass2" data-match="reg.pass" class="form-control" id="exampleInputPassword1" placeholder="" required>
+		  </div>
+		  <div class="clearfix"></div>
+			{% csrf_token %}
+	</div>
+	<div style="text-align: center;">
+		<button type="submit" style="color: white; font-weight: bold;" ng-click="trySubmit()" href="" class="btn">Регистрация</button>
+	</div>
+</form>

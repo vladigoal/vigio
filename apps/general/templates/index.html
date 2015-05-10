@@ -1,0 +1,111 @@
+{% extends "site_base.html" %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+	<link href="{% static 'css/index.css' %}" type="text/css"  rel="stylesheet"/>
+	<script>
+	$(function(){
+		$('#newsCarousel').carousel('pause')
+	  $('#newsCarousel').carousel({
+	   interval: 500
+	  });
+	});
+ </script>
+{% endblock %}
+
+{% block header %}
+	<header class="container-fluid header">
+		<div class="hd1" style="color: #fff;">
+			<div class="col-sm-8 col-sm-offset-2">
+				<a class="logo"><img src="{% static 'img/index/logo.png' %}" /></a>
+				{% include "search.html" %}
+			</div>
+		</div>
+
+		<menu class="col-xs-9 col-xs-offset-2">
+			<li>
+				<span>БРЕНД VIGIO</span>
+				{% include 'menu/brand.html' %}
+			</li>
+      <li>
+				<span>ONLINE МАГАЗИН</span>
+	      {% include 'menu/shop.html' %}
+			</li>
+      <li>
+				<span>LOOKBOOK</span>
+		    {% include 'menu/lookbook.html' %}
+			</li>
+			<li>
+				<span>ИНФО</span>
+				{% include 'menu/info.html' %}
+			</li>
+			<li>
+				<a href="/news/">НОВОСТИ</a>
+			</li>
+			<li>
+				<a href="/contacts/">КОНТАКТЫ</a>
+			</li>
+    </menu>
+	</header>
+{% endblock header %}
+
+
+{% block container %}
+	<div class="colection">
+		<div class="col-sm-12">
+			<!-- Carousel -->
+			<div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 600px;">
+				<div class="carousel-inner">
+					{% for link in links %}
+						{% if forloop.counter0 %}
+							<a href="{{ link.link }}" class="item" style="background-image: url('{{ link.image.url }}');">
+						{% else %}
+							<a href="{{ link.link }}" class="item active" style="background-image: url('{{ link.image.url }}');">
+						{% endif %}
+								<div class="text">
+									<div class="ttl">{{ link.name }}</div>
+									<div class="desc">{{ link.desc|safe }}</div>
+								</div>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+			<!-- /.carousel -->
+			{% if links|length > 1 %}
+				<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+					<img src="{% static 'img/index/arrow_l.png' %}">
+				</a>
+				<a class="right carousel-control" href="#myCarousel" data-slide="next">
+					<img src="{% static 'img/index/arrow_r.png' %}">
+				</a>
+			{% endif %}
+		</div>
+
+		<a href="/news/" class="news"><img src="{% static 'img/index/icon_news.png' %}" /></a>
+		<a href="/reviews/" class="reviews"><img src="{% static 'img/index/icon_reviews.png' %}" /></a>
+	</div>
+
+	<div class="col-sm-6 news_reviews">
+		<div class="">
+			<!-- Carousel -->
+			<div id="newsCarousel" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner" role="listbox">
+					{% for ne in news %}
+						{% if forloop.counter0 %}
+							<a href="/news/{{ ne.slug }}/" class="item" style="background-image: url('{{ ne.image.url }}');">
+						{% else %}
+							<a href="/news/{{ ne.slug }}/" class="item active" style="background-image: url('{{ ne.image.url }}');">
+						{% endif %}
+								<div class="text">
+									<div class="ttl">{{ ne.name }}</div>
+								</div>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+			<!-- /.carousel -->
+		</div>
+	</div>
+	<div class="col-sm-6 img3" style="background-image: url({% static 'img/index/img3.jpg' %});"></div>
+
+{% endblock container %}

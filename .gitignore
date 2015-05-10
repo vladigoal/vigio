@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+
+local_settings.py
+uwsgi.ini
+
+vigio/media/
+sphinx_conf/
+media/
+logs/
+
+*.DS_Store
+db.*
